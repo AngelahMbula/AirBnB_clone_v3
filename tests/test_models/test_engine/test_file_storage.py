@@ -4,7 +4,7 @@
 from datetime import datetime
 import inspect
 import models
-from models.engine import file_storage
+from models import storage
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
