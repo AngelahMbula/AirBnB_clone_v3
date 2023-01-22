@@ -1,10 +1,12 @@
 #!/usr/bin/python3
-""" Module for testing file storage"""
+"""
+Contains the TestFileStorageDocs classes
+"""
 
 from datetime import datetime
 import inspect
 import models
-from models import storage
+from models.engine import file_storage
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
