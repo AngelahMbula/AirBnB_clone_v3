@@ -24,6 +24,7 @@ def tearDown(error):
     """tearDown method"""
     storage.close()
 
+
 if __name__ == "__main__":
     app.run(host=getenv('HBNB_API_HOST'), port=int(getenv('HBNB_API_PORT')),
             threaded=True)
