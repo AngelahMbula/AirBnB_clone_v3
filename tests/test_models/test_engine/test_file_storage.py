@@ -113,3 +113,63 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get_no_args(self):
+        """testing get with no arguments"""
+        with self.assertRaises(TypeError):
+            models.storage.get()
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get_one_arg(self):
+        """testing get with one argument"""
+        with self.assertRaises(TypeError):
+            models.storage.get("State")
+        with self.assertRaises(TypeError):
+            models.storage.get(None)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get_one_arg_id(self):
+        """testing get with one argument as id"""
+        example_state = State(name="splug")
+        example_state.save()
+        e_id = example_state.id
+        with self.assertRaises(TypeError):
+            models.storage.get(id=e_id)
+        with self.assertRaises(TypeError):
+            models.storage.get(id=None)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get_one_arg_id_invalid(self):
+        """testing get with one argument as invalid"""
+        example_state = State(name="splug")
+        example_state.save()
+        e_id = example_state.id
+        with self.assertRaises(TypeError):
+            models.storage.get(None, e_id)
+        with self.assertRaises(TypeError):
+            models.storage.get("State", None)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get(self):
+        """get something from filestorage"""
+        example_state1 = State()
+        id = example_state1.id
+        models.storage.new(example_state1)
+        self.assertEqual(id, models.storage.get(State, id).id)
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_get_none(self):
+        """get obj if it's none"""
+        self.assertEqual(None, models.storage.get("boink", "666"))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing db storage")
+    def test_count(self):
+        """verify obj creation"""
+        models.storage._FileStorage__objects = {}
+        models.storage.new(State())
+        models.storage.new(State())
+        models.storage.new(City())
+        self.assertEqual(3, models.storage.count())
+        self.assertEqual(0, models.storage.count("Smerp"))
+        self.assertEqual(2, models.storage.count(State))
